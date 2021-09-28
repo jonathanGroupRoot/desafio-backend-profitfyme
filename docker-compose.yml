@@ -1,0 +1,30 @@
+version: "3.7"
+
+services: 
+    profitfyme:
+        image: postgres
+        container_name: profitfyme
+        restart: always
+        ports: 
+            - 5432:5432
+        environment: 
+            - POSTGRES_USER=profitfyme_user
+            - POSTGRES_PASSWORD=profitfyme_root
+            - POSTGRES_DB=profitme
+        volumes:
+            - pgdata:/data/postgres
+    app:
+        restart: always
+        build: .
+        container_name: dockerprofitfyme
+        ports: 
+            - 3000:3000
+        volumes: 
+            - .:/usr/app
+        links:
+            - profitfyme
+        depends_on: 
+            - profitfyme
+volumes:
+    pgdata:
+        driver: local
